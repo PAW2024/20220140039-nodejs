@@ -11,6 +11,7 @@ let todos = [
     },
 ];
 
+//post method (menambah data)
 router.get('/', (req, res)=> {res.json(todos);});
 
 router.post('/', (req, res)=> {
@@ -22,5 +23,24 @@ router.post('/', (req, res)=> {
     todos.push(newTodo);
     res.status(201).json(newTodo);
 });
+//delete method (menghapus data)
+router.delete('/:id', (req, res)=> {
+    const todoIndex = todos.findIndex(t => t.id === parseInt(req.params.id)); //endpoint untuk menghapus tugas
+    if (todoIndex === -1) return res.status(404).json({message: 'Tugas tidak ditemukan'});
 
+    const deletedTodo = todos.splice(todoIndex, 1)[0]; //menghapus dan menyimpan todo yang dihapus
+    res.status(200).json({message: `Tugas '${deletedTodo.task}' telah dihapus`}); 
+});
+
+//endpoint untuk memperbarui tugas
+router.put('/:id', (req, res)=> {
+    const todo = todos.find(t => t.id === parseInt(req.params.id)); //endpoint untuk memperbarui tugas
+    if (!todo) return res.status(404).json({message: 'Tugas tidak ditemukan'});
+    todo.task = req.body.task || todo.task;
+
+    res.status(200).json({
+        message: `Tugas dengan ID ${todo.id} telah diperbarui`,
+        updatedTodo: todo 
+    });
+});
 module.exports = router;

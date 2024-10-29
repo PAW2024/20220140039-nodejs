@@ -3,6 +3,7 @@ const app = express();
 const todoRoutes = require('./routes/todo.js');
 const port = 3000;
 
+//post method (menambah data)
 app.use(express.json());
 
 app.use('/todos', todoRoutes);
